@@ -8,6 +8,8 @@
       - "5000:80"
     depends_on:
       - postgres
+    environment:
+      - Database__ConnectionString=Host=postgres;Port=5432;Username=course;Password=changeme;Database=movies
 
   postgres:
     image: postgres:latest

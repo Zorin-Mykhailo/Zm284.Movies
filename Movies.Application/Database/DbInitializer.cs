@@ -12,7 +12,7 @@ public class DbInitializer {
     public async Task InitializeAsync() {
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
         await connection.ExecuteAsync("""
-            create table if not exist movies (
+            create table if not exists movies (
             id UUID primary key,
             slug TEXT not null,
             title TEXT not null,
