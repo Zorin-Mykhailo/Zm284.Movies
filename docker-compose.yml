@@ -1,0 +1,20 @@
+﻿services:
+  movies.api:
+    image: ${DOCKER_REGISTRY-}moviesapi
+    build:
+      context: .
+      dockerfile: Movies.Api/Dockerfile
+    ports:
+      - "5000:80"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment: 
+        - POSTGRES_USER=course
+        - POSTGRES_PASSWORD=changeme
+        - POSTGRES_DB=movies
+    ports:
+        - '5432:5432'

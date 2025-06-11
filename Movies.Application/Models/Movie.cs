@@ -2,7 +2,7 @@
 
 namespace Movies.Application.Models;
 
-public class Movie {
+public partial class Movie {
     public required Guid Id { get; init; }
 
     public required string Title { get; set; }
