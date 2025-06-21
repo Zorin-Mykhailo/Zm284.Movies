@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.HttpOverrides;
+using Movies.Api.Mapping;
 using Movies.Application;
 using Movies.Application.Database;
 using Scalar.AspNetCore;
@@ -34,6 +35,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseMiddleware<ValidationMappingMiddleware>();
 app.MapControllers();
 
 DbInitializer dbInitializer = app.Services.GetRequiredService<DbInitializer>();
