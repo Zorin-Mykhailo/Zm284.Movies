@@ -5,9 +5,11 @@ using Movies.Application.Models;
 using Movies.Contracts.Responses;
 using Movies.Api.Mapping;
 using Movies.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Movies.Api.Controllers;
 
+[Authorize]
 [ApiController]
 public class MoviesController : ControllerBase {
     private readonly IMovieService _movieService;
