@@ -7,7 +7,7 @@ WebApplication app = builder.Build();
 if(app.Environment.IsDevelopment()) {
     app.MapOpenApi();
     app.MapScalarApiReference(options => {
-        options.Title = "Zm.Movies";
+        options.Title = "Zm.Identity";
         //options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
         options.ShowSidebar = true;
 

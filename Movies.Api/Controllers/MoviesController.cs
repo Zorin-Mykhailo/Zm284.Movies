@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Movies.Api.Controllers;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 public class MoviesController : ControllerBase {
     private readonly IMovieService _movieService;

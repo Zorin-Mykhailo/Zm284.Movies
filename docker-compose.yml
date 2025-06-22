@@ -1,4 +1,14 @@
-services:
+﻿services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment: 
+        - POSTGRES_USER=course
+        - POSTGRES_PASSWORD=changeme
+        - POSTGRES_DB=movies
+    ports:
+        - '5432:5432'
+
   movies.api:
     image: ${DOCKER_REGISTRY-}moviesapi
     build:
@@ -12,19 +22,12 @@ services:
     environment:
       - Database__ConnectionString=Host=postgres;Port=5432;Username=course;Password=changeme;Database=movies
 
-  postgres:
-    image: postgres:latest
-    restart: always
-    environment: 
-        - POSTGRES_USER=course
-        - POSTGRES_PASSWORD=changeme
-        - POSTGRES_DB=movies
-    ports:
-        - '5432:5432'
-
-  identity.api:
-    image: ${DOCKER_REGISTRY-}identityapi
-    build:
-      context: .
-      dockerfile: Identity.Api/Dockerfile
+  # identity.api:
+  #   image: ${DOCKER_REGISTRY-}identityapi
+  #   build:
+  #     context: .
+  #     dockerfile: Identity.Api/Dockerfile
+  #   ports:
+  #       - "8080:8080"
+  #       - "8181:8081"
 
