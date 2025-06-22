@@ -1,4 +1,4 @@
-﻿services:
+services:
   movies.api:
     image: ${DOCKER_REGISTRY-}moviesapi
     build:
@@ -21,3 +21,10 @@
         - POSTGRES_DB=movies
     ports:
         - '5432:5432'
+
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: Identity.Api/Dockerfile
+
