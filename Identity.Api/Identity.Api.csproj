@@ -4,21 +4,16 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>869737d5-e4d2-4ab7-815c-c87b6eb2681b</UserSecretsId>
+    <UserSecretsId>58b23067-3e3c-483b-a1bb-7ac4e62ddb0e</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.2.25164.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1-Preview.1" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.4.13" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Movies.Application\Movies.Application.csproj" />
-    <ProjectReference Include="..\Movies.Contracts\Movies.Contracts.csproj" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.5.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
   </ItemGroup>
 
 </Project>

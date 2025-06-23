@@ -1,4 +1,14 @@
 ﻿services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment: 
+        - POSTGRES_USER=course
+        - POSTGRES_PASSWORD=changeme
+        - POSTGRES_DB=movies
+    ports:
+        - '5432:5432'
+
   movies.api:
     image: ${DOCKER_REGISTRY-}moviesapi
     build:
@@ -9,15 +19,15 @@
         - "81:8081"
     depends_on:
       - postgres
-    environment:
-      - Database__ConnectionString=Host=postgres;Port=5432;Username=course;Password=changeme;Database=movies
+    # environment:
+    #   - Database__ConnectionString=Host=postgres;Port=5432;Username=course;Password=changeme;Database=movies
 
-  postgres:
-    image: postgres:latest
-    restart: always
-    environment: 
-        - POSTGRES_USER=course
-        - POSTGRES_PASSWORD=changeme
-        - POSTGRES_DB=movies
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: Identity.Api/Dockerfile
     ports:
-        - '5432:5432'
+        - "6000:8080"
+        - "6001:8081"
+

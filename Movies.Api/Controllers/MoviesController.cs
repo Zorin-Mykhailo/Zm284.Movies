@@ -5,14 +5,18 @@ using Movies.Application.Models;
 using Movies.Contracts.Responses;
 using Movies.Api.Mapping;
 using Movies.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Movies.Api.Controllers;
 
+[Authorize]
 [ApiController]
 public class MoviesController : ControllerBase {
+    private readonly ILogger<MoviesController> _logger;
     private readonly IMovieService _movieService;
 
-    public MoviesController(IMovieService movieRepository) {
+    public MoviesController(ILogger<MoviesController> logger, IMovieService movieRepository) {
+        _logger = logger;
         _movieService = movieRepository;
     }
 
@@ -27,7 +31,7 @@ public class MoviesController : ControllerBase {
 
     [HttpGet(ApiEndpoints.Movies.Get)]
     public async Task<IActionResult> Get([FromRoute] string idOrSlug, CancellationToken token) {
-
+        _logger.LogInformation("Запит до Movies.Get");
         Movie? movie = Guid.TryParse(idOrSlug, out Guid id) 
             ? await _movieService.GetByIdAsync(id, token)
             : await _movieService.GetBySlugAsync(idOrSlug, token); 
