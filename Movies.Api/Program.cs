@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Models.Interfaces;
+using Movies.Api;
 using Movies.Api.Mapping;
 using Movies.Application;
 using Movies.Application.Database;
@@ -30,7 +31,14 @@ builder.Services.AddAuthentication(x => {
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(x => {
+    x.AddPolicy(AuthConstants.AdminUserPolicyName, p => p.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
+    x.AddPolicy(AuthConstants.TrustedMemberPolicyName, p => p.RequireAssertion(c => 
+        c.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true"})
+        || c.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true" })
+
+        ));
+});
 
 builder.Services.AddControllers();
 //builder.Services.AddOpenApi();
