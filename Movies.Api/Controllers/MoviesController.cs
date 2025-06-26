@@ -36,7 +36,7 @@ public class MoviesController : ControllerBase {
         Guid? userId = HttpContext.GetUserId();
         Movie? movie = Guid.TryParse(idOrSlug, out Guid id) 
             ? await _movieService.GetByIdAsync(id, userId, token)
-            : await _movieService.GetBySlugAsync(idOrSlug, userId token); 
+            : await _movieService.GetBySlugAsync(idOrSlug, userId, token); 
         if(movie is null) return NotFound();
         MovieResponse response = movie.MapToResponse();
         return Ok(response);

@@ -84,14 +84,14 @@ public class MovieRepository : IMovieRepository {
             delete from genres where movieid = @id
             """, new { id = movie.Id}, cancellationToken: token));
 
-        foreach(var genre in movie.Genres) {
+        foreach(string genre in movie.Genres) {
             await connection.ExecuteAsync(new CommandDefinition("""
                 insert into genres (movieId, name)
                 values (@MovieId, @Name)
                 """, new { MovieId = movie.Id, Name = genre}, cancellationToken: token));
         }
 
-        var result = await connection.ExecuteAsync(new CommandDefinition("""
+        int result = await connection.ExecuteAsync(new CommandDefinition("""
             update movies set slug = @Slug, title = @Title, yearofrelease = @YearOfRelease
             where id = @Id
             """, movie, cancellationToken: token));
