@@ -37,7 +37,7 @@ public class MovieRepository : IMovieRepository {
         return result > 0;
     }
 
-    public async Task<Movie?> GetByIdAsync(Guid id, CancellationToken token = default) {
+    public async Task<Movie?> GetByIdAsync(Guid id, Guid? userId = default, CancellationToken token = default) {
         using IDbConnection connection = await _dbConnectionFactory.CreateConnectionAsync(token);
         Movie? movie = await connection.QuerySingleOrDefaultAsync<Movie> (new CommandDefinition("""
             select * from movies where id = @id
@@ -58,9 +58,7 @@ public class MovieRepository : IMovieRepository {
         return movie;
     }
 
-    
-
-    public async Task<IEnumerable<Movie>> GetAllAsync(CancellationToken token = default) {
+    public async Task<IEnumerable<Movie>> GetAllAsync(Guid? userId = default, CancellationToken token = default) {
         using IDbConnection connection = await _dbConnectionFactory.CreateConnectionAsync(token);
         IEnumerable<dynamic> result = await connection.QueryAsync (new CommandDefinition("""
             select m.*, string_agg(g.name, ',') as genres
@@ -78,7 +76,7 @@ public class MovieRepository : IMovieRepository {
         return qresult;
     }
 
-    public async Task<bool> UpdateAsync(Movie movie, CancellationToken token = default) {
+    public async Task<bool> UpdateAsync(Movie movie, Guid? userId = default, CancellationToken token = default) {
         using IDbConnection connection = await _dbConnectionFactory.CreateConnectionAsync(token);
         using IDbTransaction transaction = connection.BeginTransaction();
 
@@ -118,7 +116,7 @@ public class MovieRepository : IMovieRepository {
         return result > 0;
     }
 
-    public async Task<Movie?> GetBySlugAsync(string slug, CancellationToken token = default) {
+    public async Task<Movie?> GetBySlugAsync(string slug, Guid? userId = default, CancellationToken token = default) {
         using IDbConnection connection = await _dbConnectionFactory.CreateConnectionAsync(token);
         Movie? movie = await connection.QuerySingleOrDefaultAsync<Movie> (new CommandDefinition("""
             select * from movies where slug = @slug
