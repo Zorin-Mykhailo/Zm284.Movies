@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Movies.Api.Auth;
 using Movies.Api.Mapping;
+using Movies.Application.Contracts.Services;
 using Movies.Application.Models;
-using Movies.Application.Services;
 using Movies.Contracts.Requests;
 using Movies.Contracts.Responses;
 

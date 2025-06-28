@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
+using Movies.Application.Contracts.Repositories;
 using Movies.Application.Models;
-using Movies.Application.Repositories;
 
 namespace Movies.Application.Validators;
 

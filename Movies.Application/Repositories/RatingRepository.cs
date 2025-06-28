@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Movies.Application.Contracts.Repositories;
 using Movies.Application.Database;
 
 namespace Movies.Application.Repositories;
@@ -9,6 +10,18 @@ public class RatingRepository : IRatingRepository {
 
     public RatingRepository(IDbConnectionFactory dbConnectionFactory) {
         _dbConnectionFactory = dbConnectionFactory;
+    }
+
+    public async Task<bool> RateMovieAsync(Guid movieId, int rating, Guid userId, CancellationToken token) {
+        using IDbConnection connection = await _dbConnectionFactory.CreateConnectionAsync(token);
+        int result = await connection.ExecuteAsync(new CommandDefinition("""
+            insert into ratings(userid, movieid, rating)
+            values (@userId, @movieId, @rating)
+            on conflict (userid, movieid) do update
+                set rating = @rating
+            """, new { userId, movieId, rating }, cancellationToken: token));
+
+        return result > 0;
     }
 
     public async Task<float?> GetRatingAsync(Guid movieId, CancellationToken token = default) {
@@ -31,4 +44,6 @@ public class RatingRepository : IRatingRepository {
             where movieid = @movieId
             """, new { movieId, userId }, cancellationToken: token));
     }
+
+    
 }

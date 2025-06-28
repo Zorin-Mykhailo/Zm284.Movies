@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
+using Movies.Application.Contracts.Repositories;
+using Movies.Application.Contracts.Services;
 using Movies.Application.Models;
-using Movies.Application.Repositories;
 
 namespace Movies.Application.Services;
 

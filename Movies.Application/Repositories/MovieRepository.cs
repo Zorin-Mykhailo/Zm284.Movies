@@ -1,7 +1,8 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
+using Movies.Application.Contracts.Repositories;
 using Movies.Application.Database;
 using Movies.Application.Models;
-using System.Data;
 
 namespace Movies.Application.Repositories;
 
