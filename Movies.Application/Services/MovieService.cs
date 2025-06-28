@@ -7,10 +7,12 @@ namespace Movies.Application.Services;
 
 public class MovieService : IMovieService {
     private readonly IMovieRepository _movieRepository;
+    private readonly IRatingRepository _ratingRepository;
     private readonly IValidator<Movie> _movieValidator;
 
-    public MovieService(IMovieRepository movieRepository, IValidator<Movie> movieValidator) {
+    public MovieService(IMovieRepository movieRepository, IRatingRepository ratingRepository, IValidator<Movie> movieValidator) {
         _movieRepository = movieRepository;
+        _ratingRepository = ratingRepository;
         _movieValidator = movieValidator;
     }
 
@@ -35,7 +37,17 @@ public class MovieService : IMovieService {
         await _movieValidator.ValidateAndThrowAsync(movie, token);
         bool movieExist = await _movieRepository.ExistByIdAsync(movie.Id, token);
         if(!movieExist) return null;
-        await _movieRepository.UpdateAsync(movie, userId, token);
+        await _movieRepository.UpdateAsync(movie, token);
+
+        if(!userId.HasValue) {
+            float? rating = await _ratingRepository.GetRatingAsync(movie.Id, token);
+            movie.Rating = rating;
+            return movie;
+        }
+
+        var ratings = await _ratingRepository.GetRatingAsync(movie.Id, userId.Value, token);
+        movie.Rating = ratings.Rating;
+        movie.UserRating = ratings.UserRating;
         return movie;
     }
 
