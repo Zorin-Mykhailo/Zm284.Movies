@@ -32,7 +32,7 @@ public class DbInitializer {
             """);
 
         await connection.ExecuteAsync("""
-            crate table if not exists ratings (
+            create table if not exists ratings (
             userid uuid,
             movieid uuid references movies (id),
             rating integer not null,

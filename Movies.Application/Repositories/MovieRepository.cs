@@ -27,7 +27,7 @@ public class MovieRepository : IMovieRepository {
             left join ratings r on m.id = r.movieid
             left join ratings myr on m.id = myr.movieid
                 and myr.userid = @userId
-            group by id
+            group by id, userrating
             """, new { userId }, cancellationToken: token));
 
         IEnumerable<Movie> qresult = result.Select(x => new Movie {
