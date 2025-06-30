@@ -28,9 +28,11 @@ public class MoviesController(ILogger<MoviesController> logger, IMovieService mo
 
     [Authorize]
     [HttpGet(ApiEndpoints.Movies.GetAll)]
-    public async Task<IActionResult> GetAll(CancellationToken token) {
+    public async Task<IActionResult> GetAll([FromQuery] GetAllMoviesRequest request, CancellationToken token) {
         Guid? userId = HttpContext.GetUserId();
-        IEnumerable<Movie> movies = await movieRepository.GetAllAsync(userId, token);
+        GetAllMoviesOptions options = request.MapToOptions()
+            .WithUser(userId);
+        IEnumerable<Movie> movies = await movieRepository.GetAllAsync(options, token);
         MoviesResponse moviesResponse = movies.MapToResponse();
         return Ok(moviesResponse);
     }
