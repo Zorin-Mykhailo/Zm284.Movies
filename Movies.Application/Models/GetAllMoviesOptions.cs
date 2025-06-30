@@ -3,6 +3,11 @@
 namespace Movies.Application.Models;
 
 public class GetAllMoviesOptions {
+    public int Page { get; init; }
+
+    public int PageSize { get; init; }
+
+
     public string? Title { get; set; }
 
     public int? YearOfRelease { get; set; }
