@@ -1,4 +1,5 @@
-﻿using Movies.Application.Models;
+﻿using Movies.Api.Controllers;
+using Movies.Application.Models;
 using Movies.Contracts.Requests;
 using Movies.Contracts.Responses;
 
@@ -39,5 +40,14 @@ public static class ContractMapping {
             YearOfRelease = request.YearOfRelease,
             Genres = request.Genres.ToList()
         };
+    }
+
+
+    public static IEnumerable<MovieRatingResponse> MapToResponse(this IEnumerable<MovieRating> ratings) {
+        return ratings.Select(x => new MovieRatingResponse {
+            Rating = x.Rating,
+            Slug = x.Slug,
+            MovieId = x.MovieId,
+        });
     }
 }

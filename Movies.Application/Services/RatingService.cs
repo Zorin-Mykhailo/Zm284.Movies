@@ -2,18 +2,11 @@
 using Movies.Application.Contracts.Services;
 using FluentValidation;
 using FluentValidation.Results;
+using Movies.Application.Models;
 
 namespace Movies.Application.Services;
 
-public class RatingService : IRatingService {
-    private readonly IRatingRepository _ratingRepository;
-    private readonly IMovieRepository _movieRepository;
-
-    public RatingService(IRatingRepository ratingRepository, IMovieRepository movieRepository) { 
-        _ratingRepository = ratingRepository; 
-        _movieRepository = movieRepository;
-    }
-
+public class RatingService(IRatingRepository ratingRepository, IMovieRepository movieRepository) : IRatingService {
     public async Task<bool> RateMovieAsync(Guid movieId, int rating, Guid userId, CancellationToken token = default) {
         if(rating is <= 0 or > 5) {
             throw new ValidationException(new[] {
@@ -24,10 +17,19 @@ public class RatingService : IRatingService {
             });
         }
 
-        bool movieExist = await _movieRepository.ExistByIdAsync(movieId);
+        bool movieExist = await movieRepository.ExistByIdAsync(movieId);
 
         if(!movieExist) return false;
 
-        return await _ratingRepository.RateMovieAsync(movieId, rating, userId, token);
+        return await ratingRepository.RateMovieAsync(movieId, rating, userId, token);
+    }
+
+
+    public Task<bool> DeleteRatingAsync(Guid movieID, Guid userId, CancellationToken token = default) {
+        return ratingRepository.DeleteRatingAsync(movieID, userId, token);
+    }
+
+    public Task<IEnumerable<MovieRating>> GetRatingsForUserAsync(Guid userId, CancellationToken token = default) {
+        return ratingRepository.GetRatingsForUserAsync(userId, token);
     }
 }
