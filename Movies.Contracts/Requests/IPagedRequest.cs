@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Movies.Contracts.Requests;
 
-namespace Movies.Contracts.Requests;
-public interface IPagedRequest {
-    public int Page { get; init; }
+public class PagedRequest {
+    public required int Page { get; init; } = 1;
 
-    public int PageSize { get; init; }
+    public required int PageSize { get; init; } = 10;
 }

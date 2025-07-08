@@ -33,7 +33,8 @@ public class MoviesController(ILogger<MoviesController> logger, IMovieService mo
         GetAllMoviesOptions options = request.MapToOptions()
             .WithUser(userId);
         IEnumerable<Movie> movies = await movieRepository.GetAllAsync(options, token);
-        MoviesResponse moviesResponse = movies.MapToResponse();
+        int movieCount = await movieRepository.GetCountAsync(options.Title, options.YearOfRelease, token);
+        MoviesResponse moviesResponse = movies.MapToResponse(request.Page, request.PageSize, movieCount);
         return Ok(moviesResponse);
     }
 

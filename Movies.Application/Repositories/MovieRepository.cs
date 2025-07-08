@@ -190,9 +190,22 @@ public class MovieRepository : IMovieRepository {
 
 
     public async Task<bool> ExistByIdAsync(Guid id, CancellationToken token = default) {
-        using var connection = await _dbConnectionFactory.CreateConnectionAsync(token);
+        using IDbConnection connection = await _dbConnectionFactory.CreateConnectionAsync(token);
         return await connection.ExecuteScalarAsync<bool>(new CommandDefinition("""
             select count(1) from movies where id = @id
             """, new { id }, cancellationToken: token));
+    }
+
+    public async Task<int> GetCountAsync(string? title, int? yearOfRelease, CancellationToken token = default) {
+        using IDbConnection connection = await _dbConnectionFactory.CreateConnectionAsync(token);
+        return await connection.QuerySingleAsync<int>(new CommandDefinition("""
+            select count(id) from movies
+            where (@title is null or title like ('%' || @title || '%'))
+            and (@yearOfRelease is null or yearofrelease = @yearOfRelease)
+            """, new {
+                title,
+                yearOfRelease
+            }, cancellationToken: token
+        ));
     }
 }
