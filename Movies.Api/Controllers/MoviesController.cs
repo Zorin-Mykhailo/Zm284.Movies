@@ -13,7 +13,7 @@ namespace Movies.Api.Controllers;
 public class MoviesController(ILogger<MoviesController> logger, IMovieService movieRepository) : ControllerBase {
     [Authorize]
     [HttpGet(ApiEndpoints.Movies.Get)]
-    public async Task<IActionResult> Get([FromRoute] string idOrSlug, CancellationToken token) {
+    public async Task<IActionResult> Get([FromRoute] string idOrSlug, [FromServices] LinkGenerator linkGenerator, CancellationToken token) {
         logger.LogInformation("Запит до Movies.Get");
         Guid? userId = HttpContext.GetUserId();
         Movie? movie = Guid.TryParse(idOrSlug, out Guid id)
@@ -21,6 +21,24 @@ public class MoviesController(ILogger<MoviesController> logger, IMovieService mo
             : await movieRepository.GetBySlugAsync(idOrSlug, userId, token);
         if(movie is null) return NotFound();
         MovieResponse response = movie.MapToResponse();
+        var movieObj = new { id = movie.Id };
+        response.Links.Add(new Link {
+            Href = linkGenerator.GetPathByAction(HttpContext, nameof(Get), values: new { idOrSlug = movie.Id })!,
+            Rel = "self",
+            Type = "GET"
+        });
+
+        response.Links.Add(new Link {
+            Href = linkGenerator.GetPathByAction(HttpContext, nameof(Update), values: movie.Id)!,
+            Rel = "self",
+            Type = "PUT"
+        });
+
+        response.Links.Add(new Link {
+            Href = linkGenerator.GetPathByAction(HttpContext, nameof(Update), values: movie)!,
+            Rel = "self",
+            Type = "DELETE"
+        });
         return Ok(response);
     }
 

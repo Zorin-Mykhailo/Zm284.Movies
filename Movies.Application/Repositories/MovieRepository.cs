@@ -70,7 +70,7 @@ public class MovieRepository : IMovieRepository {
             select m.*, round(avg(r.rating), 1) as rating, myr. rating as userrating
             from movies m
             left join ratings r on m.id = r.movieid
-            left joing ratings myr on m.id = myr.movieid
+            left join ratings myr on m.id = myr.movieid
                 and myr.userid = @userId
             where id = @id
             group by id, userrating
